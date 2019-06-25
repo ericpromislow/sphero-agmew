@@ -1,27 +1,11 @@
-var radius = 40.0;
+// include "spherolib.js"
+
+var radius = 80.0;
+var moveOut = 80.0;
 var speed = 40.0; // units/sec
-
-const pi = Math.PI;
-const radPerDegree = pi/180.0;
-const degreePerRad = 180.0 / pi;
-
-var pathLength = 2 * pi * radius;
-var totalTimeNeeded = pathLength / speed;
 
 var x = radius;
 var y = 0.0;
-var heading = 90 * radPerDegree; // pi/2
-
-var timeTravelled = 0;
-var numParts = 30.0 ; // 100.0;
-var timeSlice = totalTimeNeeded / numParts;
-var arcSlice = pi * 2 / numParts;
-var arcTravelled = 0;
-var arcNextTravelled;
-
-var dx, dy;
-var desiredX = x, desiredY = y;
-var newHeading;
 
 var colors = [
     [230, 25, 75],
@@ -29,6 +13,7 @@ var colors = [
 [255, 225, 25],
 [67, 99, 216],
 [245, 130, 49],
+	
 [145, 30, 180],
 [70, 240, 240],
 [240, 50, 230],
@@ -55,52 +40,41 @@ function updateColor(index) {
     setMainLed({ r: colorEntry[0], g: colorEntry[1], b: colorEntry[2]});
 }
 
-async function blinkLights(colorEntry, numBlinks, delayTime) {
-    await strobe({r: colorEntry[0], g: colorEntry[1], b: colorEntry[2]}, delayTime, numBlinks);
-}
-
-async function processNextSlice() {
-    sliceIndex += 1;
-    if (sliceIndex > numParts) {
-        stopRoll();
-        await blinkLights([255, 216, 177], 7, 0.05);
-		updateColor(colors.length - 1);
-        exitProgram();
-        return;
-    }
-    updateColor(sliceIndex);
-    var location = getLocation();
+var origLocation;
+async function returnHome() {
+    var location = sLoc2wCoords(getLocation());
     x = location.x;
     y = location.y;
-    arcTravelled = sliceIndex * arcSlice;
-    arcNextTravelled = (sliceIndex + 1) * arcSlice;
-    desiredX = radius * Math.cos(arcNextTravelled);
-    desiredY = radius * Math.sin(arcNextTravelled);
-    newHeadingRad = Math.atan2(desiredY - y, desiredX - x);
-    if (newHeadingRad < 0) {
-        newHeadingRad += 2 * pi;
-    }
-    headingRad = newHeadingRad;
-    headingDeg = newHeadingRad * degreePerRad;
-    doSetHeading(headingDeg);
-    setTimeout(processNextSlice, timeSlice * 1000);
+	var dx = x - origLocation.x;
+	var dy = y - origLocation.y;
+    var newHeadingRad = calcHeadingInRads(dx, dy);
+    var headingDeg = wRadToSDeg(newHeadingRad);
+    //await speak(["d x ", roundVal(dx), ", d y ", roundVal(dy), ", rads ", roundVal(newHeadingRad), ", degrees", roundVal(headingDeg)].join(""), true);
+	var distance = Math.sqrt(dx * dx + dy * dy);
+	//registerEvent(EventType.onCollision, function() { exitProgram(); });
+	updateColor(4);
+	await roll(headingDeg, speed, distance / speed);
+	setTimeout(stopRoll, (distance/speed) * 1000);
+	updateColor(5);
 }
 
+
 async function startProgram() {
+	origLocation = sLoc2wCoords(getLocation());
     updateColor(0);
     setSpeed(speed);
-    var timeToMove = x / speed;
-    headingDeg = headingRad = 0;
+    var timeToMove = moveOut / speed;
+    var headingRad = pi / 2;
+    var headingDeg = wRadToSDeg(headingRad);
     await roll(headingDeg, speed, timeToMove);
     stopRoll();
-	await blinkLights([255, 255, 0], 6, 0.05);
-    
-    // Now start the circle
-    setTimeout(processNextSlice, timeSlice * 1000);
-    headingDeg = 90; //  - (arcSlice / 1 * degreePerRad);
-    headingRad = headingDeg * radPerDegree;
-    await roll(headingDeg, speed, totalTimeNeeded);
+	await blinkLights([255, 0, 0], 6, 0.05);
+
+	setSpeed(speed);
+    await spin(-90, 3);
 	await blinkLights([0, 255, 0], 12, 0.05);
-	updateColor([0,0,0]);
+    
+	await returnHome();
+	updateColor(3);
 	exitProgram();
 }

@@ -7,39 +7,6 @@ var speed = 40.0; // units/sec
 var x = radius;
 var y = 0.0;
 
-var colors = [
-    [230, 25, 75],
-[60, 180, 75],
-[255, 225, 25],
-[67, 99, 216],
-[245, 130, 49],
-	
-[145, 30, 180],
-[70, 240, 240],
-[240, 50, 230],
-[188, 246, 12],
-[250, 190, 190],
-[0, 128, 128],
-[230, 190, 255],
-[154, 99, 36],
-[255, 250, 200],
-[128, 0, 0],
-[170, 255, 195],
-[128, 128, 0],
-[255, 216, 177],
-[0, 0, 117],
-[128, 128, 128],
-[255, 255, 255]
-              ];
-
-var colorIndex = -1;
-var sliceIndex = -1;
-
-function updateColor(index) {
-    var colorEntry = colors[index % colors.length];
-    setMainLed({ r: colorEntry[0], g: colorEntry[1], b: colorEntry[2]});
-}
-
 var origLocation;
 async function returnHome() {
     var location = sLoc2wCoords(getLocation());

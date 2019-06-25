@@ -18,4 +18,4 @@ But there is a `speak`. I've never had a program read my `printf` statements alo
 
 At the end of the day I reread more of the Sphero docs (which are kind of fragmented), and discovered that for whatever reason, the SPRK+ uses its own coordinate system. It's been a long time since I've used the equations of rotation that I learned way back in physics class, but now I get to. The conversion from world-space to Spiro-space involves a reflection over the y-axis and then a rotation by _-π / 2_. 
 
-So I'm hoping that for day 2 I'll have a small library of conversion functions, and then everything I expect to work in standard 2-D space will with Spiro.
+It turns out that the transformation just involves swapping the x- and y-coordinates.

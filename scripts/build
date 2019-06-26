@@ -1,0 +1,5 @@
+#!/bin/bash
+
+BFILE=$1
+
+cat $(grep '^// include ' $BFILE | awk ' { print $3 }' | sed 's@"\(.*\)"@./lib/\1@g') $BFILE | pbcopy

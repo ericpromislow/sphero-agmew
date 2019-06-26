@@ -1,3 +1,5 @@
+
+
 var locationHistory;
 var locationHistoryMinCheckSize = 3;
 var locationHistoryMaxCheckSize = 10;

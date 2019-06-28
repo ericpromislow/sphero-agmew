@@ -49,3 +49,23 @@ for (var i = 0; i < 30; i++) {
         assert.isAtLeast(newHeading, currHeading - 2 * offset);
     }
 }
+
+// Test targetWithFudgeFactor
+
+var numRuns = 1000;
+var target = 1000;
+var fudge = 0.1;
+var minTarget = target - target * fudge;
+var maxTarget = target + target * fudge;
+var numUnder = 0;
+for (var i = 0; i < numRuns; i++) {
+    var result = targetWithFudgeFactor(target, fudge);
+    assert.isAtLeast(result, minTarget);
+    assert.isAtMost(result, maxTarget);
+    if (result < target) {
+        numUnder += 1;
+    }
+}
+assert.isAtLeast(numUnder, 400);
+assert.isAtMost(numUnder, 600);
+    

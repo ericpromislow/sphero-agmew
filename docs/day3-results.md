@@ -1,6 +1,7 @@
 # Day 3: Calling it done (for now?)
 
-## Rewrote the program to go with Sphero's `(y, x)` coordinates and degrees rather than a more "mathematical" radians-based system. The only place where I needed to use the conventional units and plane was when calculating the path to go from the current point to a target point.
+
+Rewrote the program to go with Sphero's `(y, x)` coordinates and degrees rather than a more "mathematical" radians-based system. The only place where I needed to use the conventional units and plane was when calculating the path to go from the current point to a target point.
 
 ## Fabricating events
 

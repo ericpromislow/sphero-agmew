@@ -46,8 +46,10 @@ I could then clear the IDE's editor script and paste the new code in.
 
 ## Cat score:
 
-Amused: 2 / 5
-Enthralled: 3 / 5 (only when it was off and stationary)
-Enraged: 0 / 5
+* Amused: 2 / 5
+
+* Enthralled: 3 / 5 (only when it was off and stationary)
+
+* Enraged: 0 / 5
 
 On the other hand, the cat liked to grab the ball with his feet when it was turned off, making it a very expensive generic cat toy.
